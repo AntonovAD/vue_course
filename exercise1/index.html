@@ -8,66 +8,68 @@
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <div id="app">
   <div v-if="isFetching" class="loader">Загрузка...</div>
-  <table v-else class="table-list">
-    <tbody>
-      <tr class="table-list-header">
-        <td
-            v-for="(item, index) in header"
-            :key="index"
-            v-on:click="tableListHeaderValueClick(item.name)"
-            v-bind:class="{'sort-asc': config.sort[item.name].count === 1, 'sort-desc': config.sort[item.name].count === 2}"
-        >
-          <span>
+  <template v-else>
+    <table class="table-list">
+      <tbody>
+        <tr class="table-list-header">
+          <td
+              v-for="(item, index) in header"
+              :key="index"
+              v-on:click="tableListHeaderValueClick(item.name)"
+              v-bind:class="{'sort-asc': config.sort[item.name].count === 1, 'sort-desc': config.sort[item.name].count === 2}"
+          >
+            <span>
+              {{ item.name }}
+              {{ config.sort[item.name].priority !== 0 ? config.sort[item.name].priority : null }}
+            </span>
+          </td>
+        </tr>
+        <tr v-for="(item, index) in sorted" :key="index">
+          <td>
             {{ item.name }}
-            {{ config.sort[item.name].priority !== 0 ? config.sort[item.name].priority : null }}
-          </span>
-        </td>
-      </tr>
-      <tr v-for="(item, index) in sorted" :key="index">
-        <td>
-          {{ item.name }}
-        </td>
-        <td>
-          {{ item.price }}
-        </td>
-      </tr>
-    </tbody>
-  </table>
-  <table class="table-filter">
-    <tbody>
-      <tr class="table-filter-header">
-        <td>
-          Фильтр
-        </td>
-      </tr>
-      <tr class="table-filter-value">
-        <td>
-          <input
-              placeholder="Цена от"
-              type="number"
-              v-model.number="config.range['Цена'].from"
-              v-on:change="tableFilterValueChange"
-          />
-        </td>
-      </tr>
-      <tr class="table-filter-value">
-        <td>
-          <input
-              placeholder="Цена до"
-              type="number"
-              v-model.number="config.range['Цена'].to"
-              v-on:change="tableFilterValueChange"
-          />
-        </td>
-      </tr>
-    </tbody>
-  </table>
+          </td>
+          <td>
+            {{ item.price }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <table class="table-filter">
+      <tbody>
+        <tr class="table-filter-header">
+          <td>
+            Фильтр
+          </td>
+        </tr>
+        <tr class="table-filter-value">
+          <td>
+            <input
+                placeholder="Цена от"
+                type="number"
+                v-model.number="config.range['Цена'].from"
+                v-on:change="tableFilterValueChange"
+            />
+          </td>
+        </tr>
+        <tr class="table-filter-value">
+          <td>
+            <input
+                placeholder="Цена до"
+                type="number"
+                v-model.number="config.range['Цена'].to"
+                v-on:change="tableFilterValueChange"
+            />
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </template>
 </div>
 <script>
   var app = new Vue({
     el: '#app',
     data: {
-      timeout: 0,
+      timeout: 2000,
       isFetching: true,
       header: [],
       data: [],
