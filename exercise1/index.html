@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<div id="app">
+  <div v-if="isFetching" class="loader">Загрузка...</div>
+  <table v-else class="table-list">
+    <tbody>
+      <tr class="table-list-header">
+        <td
+            v-for="(item, index) in header"
+            :key="index"
+            v-on:click="tableListHeaderValueClick(item.name)"
+            v-bind:class="{'sort-asc': config.sort[item.name].count === 1, 'sort-desc': config.sort[item.name].count === 2}"
+        >
+          <span>
+            {{ item.name }}
+            {{ config.sort[item.name].priority !== 0 ? config.sort[item.name].priority : null }}
+          </span>
+        </td>
+      </tr>
+      <tr v-for="(item, index) in sorted" :key="index">
+        <td>
+          {{ item.name }}
+        </td>
+        <td>
+          {{ item.price }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <table class="table-filter">
+    <tbody>
+      <tr class="table-filter-header">
+        <td>
+          Фильтр
+        </td>
+      </tr>
+      <tr class="table-filter-value">
+        <td>
+          <input
+              placeholder="Цена от"
+              type="number"
+              v-model.number="config.range['Цена'].from"
+              v-on:change="tableFilterValueChange"
+          />
+        </td>
+      </tr>
+      <tr class="table-filter-value">
+        <td>
+          <input
+              placeholder="Цена до"
+              type="number"
+              v-model.number="config.range['Цена'].to"
+              v-on:change="tableFilterValueChange"
+          />
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<script>
+  var app = new Vue({
+    el: '#app',
+    data: {
+      timeout: 0,
+      isFetching: true,
+      header: [],
+      data: [],
+      filtered: [],
+      sorted: [],
+      config: {
+        range: {
+          "Цена": {
+            from: undefined,
+            to: undefined,
+          }
+        },
+        sort: {
+          "Название": {
+            priority: 0,
+            count: 0
+          },
+          "Цена": {
+            priority: 0,
+            count: 0
+          },
+        },
+        priority: 0,
+      }
+    },
+    methods: {
+      tableFilterValueChange: function () {
+        this.filtered = this.data.concat().filter((item) => {
+          const filterFrom =
+            (this.config.range["Цена"].from !== undefined
+            && this.config.range["Цена"].from !== null
+            && this.config.range["Цена"].from !== "")
+              ? item.price >= this.config.range["Цена"].from
+              : true
+          ;
+
+          const filterTo =
+            (this.config.range["Цена"].to !== undefined
+              && this.config.range["Цена"].to !== null
+              && this.config.range["Цена"].to !== "")
+              ? item.price <= this.config.range["Цена"].to
+              : true
+          ;
+
+          return filterFrom && filterTo;
+        });
+
+        this.config.sort["Название"].count = 0;
+        this.config.sort["Цена"].count = 0;
+        this.sorted = this.filtered.concat();
+      },
+      tableListHeaderValueClick: function (item) {
+        if (this.config.sort[item].count === 0) {
+          this.config.priority++;
+          this.config.sort[item].priority = this.config.priority;
+        }
+
+        this.config.sort[item].count = {
+          0: 1,
+          1: 2,
+          2: 0,
+        }[this.config.sort[item].count];
+
+        if (this.config.sort[item].count === 0) {
+          this.config.priority--;
+          Object.entries(this.config.sort).map(([key, value]) => {
+            this.config.sort[key].priority =
+              this.config.sort[key].priority > this.config.sort[item].priority
+                ? value.priority !== 0
+                  ? value.priority-1
+                  : 0
+                : this.config.sort[key].priority
+            ;
+          });
+          this.config.sort[item].priority = 0;
+        }
+
+        this.sorted = this.filtered.concat().sort((a,b) => {
+          const compareName = {
+            0: 0,
+            1: a.name.localeCompare(b.name),
+            2: b.name.localeCompare(a.name),
+          }[this.config.sort["Название"].count];
+
+          const comparePrice = {
+            0: 0,
+            1: a.price-b.price,
+            2: b.price-a.price,
+          }[this.config.sort["Цена"].count];
+
+          const compareDict = {
+            "Название": compareName,
+            "Цена": comparePrice
+          };
+
+          const comparePriority = Object.entries(this.config.sort).map(([key, value]) => {
+            return {
+              name: key,
+              priority: value.priority,
+            };
+          });
+
+          comparePriority.sort((a,b) => {
+            return a.priority - b.priority;
+          });
+
+          return compareDict[comparePriority[0].name] || compareDict[comparePriority[1].name];
+        });
+      },
+    },
+    mounted: function () {
+      this.isFetching = true;
+
+      setTimeout(() => {
+        this.header = [
+          {
+            name: "Название"
+          },
+          {
+            name: "Цена"
+          },
+        ];
+        this.data = [
+          {
+            name: "материнка",
+            price: 6210,
+          },
+          {
+            name: "проц",
+            price: 8730,
+          },
+          {
+            name: "видюха",
+            price: 4540,
+          },
+          {
+            name: "видюха",
+            price: 7100,
+          },
+          {
+            name: "бп",
+            price: 2080,
+          },
+          {
+            name: "корпус",
+            price: 5600,
+          },
+          {
+            name: "двд-ром",
+            price: 1050,
+          },
+          {
+            name: "жесткий диск",
+            price: 3400,
+          },
+          {
+            name: "звуковая",
+            price: 3250,
+          },
+          {
+            name: "оператива",
+            price: 6210,
+          },
+        ];
+        this.filtered = this.data.concat();
+        this.sorted = this.data.concat();
+        this.isFetching = false;
+      }, this.timeout);
+    }
+  })
+</script>
+<style>
+  body {
+    font-family: "Courier New", serif;
+    margin: 20px
+  }
+  input {
+    font-family: inherit;
+  }
+  #app {
+    display: flex;
+    flex-direction: row;
+  }
+  .loader {
+    padding: 10px 0 0 50px;
+  }
+  .table-list {
+
+  }
+  .table-list-header {
+    cursor: pointer;
+    background: lavender;
+  }
+  .table-list-header td:hover {
+    background: moccasin;
+  }
+  .table-list-header td span::after {
+    content: '';
+  }
+  .table-list-header td.sort-asc span::after {
+    content: '▲';
+  }
+  .table-list-header td.sort-desc span::after {
+    content: '▼';
+  }
+  .table-filter {
+
+  }
+  .table-filter-header td {
+    background: lavender;
+  }
+  .table-filter-header td:hover {
+    background: lavender;
+  }
+  .table-filter-value td {
+    padding: 0;
+  }
+  .table-filter-value td input {
+    border: none;
+    outline: none;
+    padding: 0;
+    height: 38px;
+    text-align: center;
+  }
+  .table-filter-value td input:hover {
+    background: whitesmoke;
+  }
+  tr, td {
+    border-color: transparent;
+  }
+  td {
+    border: 1px solid white;
+    padding: 10px 50px;
+    min-width: 58px;
+  }
+  td:hover {
+    background: whitesmoke;
+  }
+</style>
+</body>
+</html>
