@@ -35,26 +35,37 @@
         Фильтр
       </td>
     </tr>
-    <tr class="table-filter-value">
-      <td>
-        <input
-          placeholder="Цена от"
-          type="number"
-          v-model.number="config.filter['Цена'].from"
-          v-on:change="filterChange"
-        />
-      </td>
-    </tr>
-    <tr class="table-filter-value">
-      <td>
-        <input
-          placeholder="Цена до"
-          type="number"
-          v-model.number="config.filter['Цена'].to"
-          v-on:change="filterChange"
-        />
-      </td>
-    </tr>
+    <fragment
+      v-for="(value, key) in filter"
+      :key="key"
+    >
+      <fragment v-if="value.type === 'range'">
+        <tr class="table-filter-value">
+          <td>
+            <label>
+              <input
+                :placeholder="value.from.placeholder"
+                :type="value.from.type"
+                v-model.number="value.from.value"
+                v-on:change="filterChange(key)"
+              />
+            </label>
+          </td>
+        </tr>
+        <tr class="table-filter-value">
+          <td>
+            <label>
+              <input
+                :placeholder="value.from.placeholder"
+                :type="value.from.type"
+                v-model.number="value.to.value"
+                v-on:change="filterChange(key)"
+              />
+            </label>
+          </td>
+        </tr>
+      </fragment>
+    </fragment>
     </tbody>
   </table>
   </fragment>
@@ -71,7 +82,7 @@
       list: Array,
       header: Array,
       headerOnClick: Function,
-      filter: Array,
+      filter: Object,
       filterChange: Function,
       config: Object,
     }

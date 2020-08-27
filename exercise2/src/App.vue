@@ -6,7 +6,7 @@
       :list="sorted"
       :header="header"
       :headerOnClick="tableListHeaderValueClick"
-      :filter="undefined"
+      :filter="config.filter"
       :filterChange="tableFilterValueChange"
       :config="config"
     />
@@ -35,29 +35,33 @@ export default {
     }
   },
   methods: {
-    tableFilterValueChange: function () {
+    tableFilterValueChange: function (key) {
       this.filtered = this.data.concat().filter((item) => {
         const filterFrom =
-          (this.config.filter["Цена"].from !== undefined
-            && this.config.filter["Цена"].from !== null
-            && this.config.filter["Цена"].from !== "")
-            ? item.price >= this.config.filter["Цена"].from
+          (this.config.filter[key].from.value !== undefined
+            && this.config.filter[key].from.value !== null
+            && this.config.filter[key].from.value !== "")
+            ? item.price >= this.config.filter[key].from.value
             : true
         ;
 
         const filterTo =
-          (this.config.filter["Цена"].to !== undefined
-            && this.config.filter["Цена"].to !== null
-            && this.config.filter["Цена"].to !== "")
-            ? item.price <= this.config.filter["Цена"].to
+          (this.config.filter[key].to.value !== undefined
+            && this.config.filter[key].to.value !== null
+            && this.config.filter[key].to.value !== "")
+            ? item.price <= this.config.filter[key].to.value
             : true
         ;
 
         return filterFrom && filterTo;
       });
 
-      this.config.sort["Название"].count = 0;
-      this.config.sort["Цена"].count = 0;
+      Object.entries(this.config.sort).forEach(([key]) => {
+
+        this.config.sort[key].count = 0;
+        this.config.sort[key].priority = 0;
+      });
+      this.config.priority = 0;
       this.sorted = this.filtered.concat();
     },
     tableListHeaderValueClick: function (item) {
@@ -179,8 +183,16 @@ export default {
         filter: {
           ["Цена"]: {
             type: "range",
-            from: undefined,
-            to: undefined,
+            from: {
+              placeholder: "Цена от",
+              type: "number",
+              value: undefined,
+            },
+            to: {
+              placeholder: "Цена до",
+              type: "number",
+              value: undefined,
+            },
           }
         },
         sort: {
