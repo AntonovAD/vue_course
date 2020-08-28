@@ -117,8 +117,11 @@
           return filterFrom && filterTo;
         });
 
-        this.config.sort["Название"].count = 0;
-        this.config.sort["Цена"].count = 0;
+        Object.entries(this.config.sort).forEach(([key]) => {
+          this.config.sort[key].count = 0;
+          this.config.sort[key].priority = 0;
+        });
+        this.config.priority = 0;
         this.sorted = this.filtered.concat();
       },
       tableListHeaderValueClick: function (item) {
