@@ -189,8 +189,6 @@
             price: 6210,
           },
         ];
-        this.filtered = this.data.concat();
-        this.sorted = this.data.concat();
         this.config = {
           filter: {
             ["Цена"]: {
