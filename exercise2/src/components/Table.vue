@@ -47,7 +47,7 @@
                 :placeholder="value.from.placeholder"
                 :type="value.from.type"
                 v-model.number="value.from.value"
-                v-on:change="filterChange(key)"
+                v-on:change="filterChange"
               />
             </label>
           </td>
@@ -56,10 +56,10 @@
           <td>
             <label>
               <input
-                :placeholder="value.from.placeholder"
-                :type="value.from.type"
-                v-model.number="value.to.value"
-                v-on:change="filterChange(key)"
+                :placeholder="value.to.placeholder"
+                :type="value.to.type"
+                v-model.lazy.number="value.to.value"
+                v-on:change="filterChange"
               />
             </label>
           </td>

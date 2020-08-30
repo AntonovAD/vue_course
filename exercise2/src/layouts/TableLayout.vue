@@ -32,68 +32,40 @@
         isFetching: true,
         header: [],
         data: [],
-        filtered: [],
-        sorted: [],
         config: {},
       }
     },
-    methods: {
-      tableFilterValueChange: function (key) {
-        this.filtered = this.data.concat().filter((item) => {
-          const filterFrom =
-            (this.config.filter[key].from.value !== undefined
-              && this.config.filter[key].from.value !== null
-              && this.config.filter[key].from.value !== "")
-              ? item.price >= this.config.filter[key].from.value
-              : true
-          ;
+    computed: {
+      filtered: function () {
+        return Object.entries(this.config.filter).reduce((result, [, value]) => {
+          return this.data.concat().filter((item) => {
+            if (value.type === "range") {
+              const filterFrom =
+                (value.from.value !== undefined
+                  && value.from.value !== null
+                  && value.from.value !== "")
+                  ? item[value.ref] >= value.from.value
+                  : true
+              ;
 
-          const filterTo =
-            (this.config.filter[key].to.value !== undefined
-              && this.config.filter[key].to.value !== null
-              && this.config.filter[key].to.value !== "")
-              ? item.price <= this.config.filter[key].to.value
-              : true
-          ;
+              const filterTo =
+                (value.to.value !== undefined
+                  && value.to.value !== null
+                  && value.to.value !== "")
+                  ? item[value.ref] <= value.to.value
+                  : true
+              ;
 
-          return filterFrom && filterTo;
-        });
-
-        Object.entries(this.config.sort).forEach(([key]) => {
-
-          this.config.sort[key].count = 0;
-          this.config.sort[key].priority = 0;
-        });
-        this.config.priority = 0;
-        this.sorted = this.filtered.concat();
-      },
-      tableListHeaderValueClick: function (item) {
-        if (this.config.sort[item].count === 0) {
-          this.config.priority++;
-          this.config.sort[item].priority = this.config.priority;
-        }
-
-        this.config.sort[item].count = {
-          0: 1,
-          1: 2,
-          2: 0,
-        }[this.config.sort[item].count];
-
-        if (this.config.sort[item].count === 0) {
-          this.config.priority--;
-          Object.entries(this.config.sort).map(([key, value]) => {
-            this.config.sort[key].priority =
-              this.config.sort[key].priority > this.config.sort[item].priority
-                ? value.priority !== 0
-                ? value.priority-1
-                : 0
-                : this.config.sort[key].priority
-            ;
+              return filterFrom && filterTo;
+            } else {
+              console.error(`unknown filter type: ${value.type}`);
+              return true;
+            }
           });
-          this.config.sort[item].priority = 0;
-        }
-
-        this.sorted = this.filtered.concat().sort((a,b) => {
+        }, []);
+      },
+      sorted: function () {
+        return this.filtered.concat().sort((a,b) => {
           const compareName = {
             0: 0,
             1: a.name.localeCompare(b.name),
@@ -124,6 +96,43 @@
 
           return compareDict[comparePriority[0].name] || compareDict[comparePriority[1].name];
         });
+      },
+    },
+    methods: {
+      tableFilterValueChange: function () {
+        //сбрасываем конфиг сортировки
+        Object.entries(this.config.sort).forEach(([key]) => {
+          this.config.sort[key].count = 0;
+          this.config.sort[key].priority = 0;
+        });
+        this.config.priority = 0;
+      },
+      tableListHeaderValueClick: function (item) {
+        //выставляем конфиг сортировки
+        if (this.config.sort[item].count === 0) {
+          this.config.priority++;
+          this.config.sort[item].priority = this.config.priority;
+        }
+
+        this.config.sort[item].count = {
+          0: 1,
+          1: 2,
+          2: 0,
+        }[this.config.sort[item].count];
+
+        if (this.config.sort[item].count === 0) {
+          this.config.priority--;
+          Object.entries(this.config.sort).map(([key, value]) => {
+            this.config.sort[key].priority =
+              this.config.sort[key].priority > this.config.sort[item].priority
+                ? value.priority !== 0
+                ? value.priority-1
+                : 0
+                : this.config.sort[key].priority
+            ;
+          });
+          this.config.sort[item].priority = 0;
+        }
       },
     },
     mounted: function () {
@@ -186,13 +195,14 @@
           filter: {
             ["Цена"]: {
               type: "range",
+              ref: "price",
               from: {
                 placeholder: "Цена от",
                 type: "number",
                 value: undefined,
               },
               to: {
-                placeholder: "Цена до",
+                placeholder: "Цена до (lazy)",
                 type: "number",
                 value: undefined,
               },
