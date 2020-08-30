@@ -4,7 +4,7 @@
       v-for="(tab, index) in tabs"
       :key="index"
       v-bind:class="['tab-button', {'active': currentTab===index}]"
-      v-on:click="currentTab=index"
+      v-on:click="$store.dispatch('setCurrentTab', {index})"
     >
       {{ tab.name }}
     </button>
@@ -16,6 +16,7 @@
 
 <script>
   import TableLayout from "./layouts/TableLayout";
+  import {mapState} from "vuex";
 
   export default {
     name: 'App',
@@ -34,9 +35,18 @@
             component: TableLayout,
           },
         ],
-        currentTab: 0,
       };
-    }
+    },
+    computed: {
+      ...mapState([
+        //проброс через массив строк
+        'currentTab',
+      ]),
+      ...mapState({
+        //проброс через функцию //currentTab: state => state.currentTab,
+        //проброс через строку //currentTab: "currentTab",
+      }),
+    },
   }
 </script>
 
