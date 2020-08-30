@@ -1,14 +1,17 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import TableLayout from "../layouts/TableLayout";
 
 Vue.use(VueRouter);
 
-  const routes = [
+const routes = [
   {
     path: '/',
-    name: 'Home',
-    component: Home
+    redirect: '/table',
+  },
+  {
+    path: '/table/:id',
+    component: TableLayout,
   },
   {
     path: '/about',

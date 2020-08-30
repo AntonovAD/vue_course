@@ -1,46 +1,48 @@
 <template>
   <div id="app">
-    <!--<div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>-->
-    <button
+    <router-link
       v-for="(tab, index) in tabs"
+      :to="tab.href"
       :key="index"
-      v-bind:class="['tab-button', {'active': currentTab===index}]"
-      v-on:click="$store.dispatch('setCurrentTab', {index})"
     >
-      {{ tab.name }}
-    </button>
+      <button
+        v-bind:class="['tab-button', {'active': currentTab===index}]"
+        v-on:click="$store.dispatch('setCurrentTab', {index})"
+      >
+        {{ tab.name }}
+      </button>
+    </router-link>
     <keep-alive>
-      <component v-bind:is="tabs[currentTab].component" :key="currentTab"/>
+      <router-view v-if="currentTab<tabs.length && currentTab>=0" :key="currentTab"/>
     </keep-alive>
   </div>
 </template>
 
 <script>
-  import TableLayout from "./layouts/TableLayout";
   import {mapState} from "vuex";
 
   export default {
     name: 'App',
     components: {
-      TableLayout,
     },
     data: function() {
       return {
         tabs: [
           {
             name:"Первый",
-            component: TableLayout,
+            href:"/table/0",
           },
           {
             name:"Второй",
-            component: TableLayout,
+            href:"/table/1",
           },
         ],
       };
+    },
+    methods: {
+      isNumeric: function (n) {
+        return !isNaN(parseFloat(n)) && isFinite(n);
+      },
     },
     computed: {
       ...mapState([
@@ -51,6 +53,14 @@
         //проброс через функцию //currentTab: state => state.currentTab,
         //проброс через строку //currentTab: "currentTab",
       }),
+    },
+    mounted() {
+      if (this.isNumeric(this.$route.params.id)) {
+        this.$store.dispatch('setCurrentTab', {index: parseFloat(this.$route.params.id)});
+      } else {
+        this.$store.dispatch('setCurrentTab', {index: 0});
+        this.$router.replace("/table/0");
+      }
     },
   }
 </script>
@@ -80,15 +90,5 @@
   }
   .tab-button.active {
     background: lavender;
-  }
-  #nav {
-    padding: 30px;
-  }
-  #nav a {
-    font-weight: bold;
-    color: #2c3e50;
-  }
-  #nav a.router-link-exact-active {
-    color: #42b983;
   }
 </style>
