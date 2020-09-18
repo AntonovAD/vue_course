@@ -14,7 +14,7 @@ export default () => {
         config: {},
       },
       cart: {
-
+        list: [],
       },
     },
     getters: {
@@ -138,6 +138,9 @@ export default () => {
           state.list.config.sort[name].priority = 0;
         }
       },
+      addToCart(state, {item}) {
+        state.cart.list.push(item);
+      }
     },
     actions: {
       requestList(context, {}) {
@@ -246,6 +249,9 @@ export default () => {
       },
       setListConfigSort(context, {name}) {
         context.commit("setListConfigSort", {name});
+      },
+      addToCart(context, {item}) {
+        context.commit("addToCart", {item});
       },
     },
     modules: {}

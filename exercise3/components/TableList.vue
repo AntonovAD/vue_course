@@ -30,6 +30,11 @@
       <td>
         {{item.price}}
       </td>
+      <td
+        v-on:click="() => buyAction(item)"
+      >
+        В корзину
+      </td>
     </tr>
     </tbody>
   </table>
@@ -55,7 +60,11 @@
         default: () => ([]),
         type: Array
       },
-      listAction: {
+      itemAction: {
+        default: () => {},
+        type: Function
+      },
+      buyAction: {
         default: () => {},
         type: Function
       },

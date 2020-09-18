@@ -8,6 +8,7 @@
       :setConfigFilter="setConfigFilter"
       :resetConfigSort="resetConfigSort"
       :setConfigSort="setConfigSort"
+      :addToCart="addToCart"
     />
   </div>
 </template>
@@ -36,6 +37,9 @@
       },
       setConfigSort(name) {
         this.$store.dispatch("setListConfigSort", {name});
+      },
+      addToCart(item) {
+        this.$store.dispatch("addToCart", {item});
       }
     },
     computed: {

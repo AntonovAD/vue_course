@@ -11,6 +11,7 @@
         :header="header"
         :headerAction="(item) => tableListHeaderValueClick(item.name)"
         :config="config"
+        :buyAction="tableListItemBuyClick"
       />
     </fragment>
   </div>
@@ -57,6 +58,10 @@
         default: () => {},
         type: Function
       },
+      addToCart: {
+        default: () => {},
+        type: Function
+      },
     },
     methods: {
       tableFilterValueChange: function (name, data, value) {
@@ -66,6 +71,9 @@
       },
       tableListHeaderValueClick: function (name) {
         this.setConfigSort(name);
+      },
+      tableListItemBuyClick: function (item) {
+        this.addToCart(item);
       },
     },
   }
