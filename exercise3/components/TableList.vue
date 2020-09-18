@@ -31,9 +31,10 @@
         {{item.price}}
       </td>
       <td
+        class="table-list-item-button"
         v-on:click="() => buyAction(item)"
       >
-        В корзину
+        {{item.inCart ? "Добавлено" : "В корзину"}}
       </td>
     </tr>
     </tbody>
@@ -103,5 +104,8 @@
   }
   td:hover {
     background: whitesmoke;
+  }
+  .table-list-item-button {
+    cursor: pointer;
   }
 </style>

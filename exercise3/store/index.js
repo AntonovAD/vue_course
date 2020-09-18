@@ -4,7 +4,7 @@ import Vuex from 'vuex'
 Vue.use(Vuex);
 
 export default () => {
-  return new Vuex.Store({
+  const store = new Vuex.Store({
     strict: true,
     state: {
       list: {
@@ -19,7 +19,7 @@ export default () => {
     },
     getters: {
       filtered: (state) => {
-        return Object.entries(state.list.config.filter || {}).reduce((result, [, value]) => {
+        return store.helpers.withCart(state, Object.entries(state.list.config.filter || {}).reduce((result, [, value]) => {
           return result.filter((item) => {
             if (value.type === "default") {
               const filterMatch =
@@ -54,10 +54,10 @@ export default () => {
               return true;
             }
           });
-        }, state.list.data.concat());
+        }, state.list.data.concat()));
       },
       sorted: (state, getters) => {
-        return getters.filtered.concat().sort((a,b) => {
+        return store.helpers.withCart(state, getters.filtered.concat().sort((a,b) => {
           const compareName = {
             0: 0,
             1: a.name.localeCompare(b.name),
@@ -87,7 +87,7 @@ export default () => {
           });
 
           return compareDict[comparePriority[0].name] || compareDict[comparePriority[1].name];
-        });
+        }));
       },
       cartItems: (state) => {
         return state.cart.list.length;
@@ -142,7 +142,11 @@ export default () => {
         }
       },
       addToCart(state, {item}) {
-        state.cart.list.push(item);
+        if (!store.helpers.inCart(state, item) ) {
+          state.cart.list.push(item);
+        } else {
+          console.warn(`item with id:${item.id} already in cart`);
+        }
       }
     },
     actions: {
@@ -155,47 +159,57 @@ export default () => {
               name: "Название",
             },
             {
-              name: "Цена"
+              name: "Цена",
             },
           ];
           const data = [
             {
+              id: 1,
               name: "материнка",
               price: 6210,
             },
             {
+              id: 2,
               name: "проц",
               price: 8730,
             },
             {
+              id: 3,
               name: "видюха",
               price: 4540,
             },
             {
+              id: 4,
               name: "видюха",
               price: 7100,
             },
             {
+              id: 5,
               name: "бп",
               price: 2080,
             },
             {
+              id: 6,
               name: "корпус",
               price: 5600,
             },
             {
+              id: 7,
               name: "двд-ром",
               price: 1050,
             },
             {
+              id: 8,
               name: "жесткий диск",
               price: 3400,
             },
             {
+              id: 9,
               name: "звуковая",
               price: 3250,
             },
             {
+              id: 10,
               name: "оператива",
               price: 6210,
             },
@@ -259,4 +273,29 @@ export default () => {
     },
     modules: {}
   });
-}
+
+  store.helpers = {};
+
+  store.helpers.inCart = (state, item) => {
+    return Boolean(
+      Object.entries(
+        state.cart.list.find((cart) => cart.id === item.id) || {}
+      ).length
+    );
+  };
+
+  store.helpers.withCart = (state, data) => {
+    if (state.cart.list.length) {
+      return data.map((item) => {
+        return {
+          ...item,
+          inCart: store.helpers.inCart(state, item)
+        };
+      });
+    } else {
+      return data;
+    }
+  };
+
+  return store;
+};
