@@ -17,8 +17,8 @@
               <input
                 :placeholder="value.data.placeholder"
                 :type="value.data.type"
-                v-model="value.data.value"
-                v-on:change="filterAction"
+                :value="value.data.value"
+                v-on:input="(event) => filterAction(key, 'data', event.target.value)"
               />
             </label>
           </td>
@@ -31,8 +31,8 @@
               <input
                 :placeholder="value.from.placeholder"
                 :type="value.from.type"
-                v-model.number="value.from.value"
-                v-on:change="filterAction"
+                :value="value.from.value"
+                v-on:input="(event) => filterAction(key, 'from', event.target.value)"
               />
             </label>
           </td>
@@ -43,8 +43,8 @@
               <input
                 :placeholder="value.to.placeholder"
                 :type="value.to.type"
-                v-model.lazy.number="value.to.value"
-                v-on:change="filterAction"
+                :value="value.to.value"
+                v-on:change="(event) => filterAction(key, 'to', event.target.value)"
               />
             </label>
           </td>

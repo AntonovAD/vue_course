@@ -45,6 +45,18 @@
         default: () => ({}),
         type: Object
       },
+      setConfigFilter: {
+        default: () => {},
+        type: Function
+      },
+      resetConfigSort: {
+        default: () => {},
+        type: Function
+      },
+      setConfigSort: {
+        default: () => {},
+        type: Function
+      },
     },
     computed: {
       filtered: function () {
@@ -120,40 +132,13 @@
       },
     },
     methods: {
-      tableFilterValueChange: function () {
-        //сбрасываем конфиг сортировки
-        Object.entries(this.config.sort).forEach(([key]) => {
-          this.config.sort[key].count = 0;
-          this.config.sort[key].priority = 0;
-        });
-        this.config.priority = 0;
+      tableFilterValueChange: function (name, data, value) {
+        this.setConfigFilter(name, data, value);
+
+        this.resetConfigSort();
       },
-      tableListHeaderValueClick: function (item) {
-        //выставляем конфиг сортировки
-        if (this.config.sort[item].count === 0) {
-          this.config.priority++;
-          this.config.sort[item].priority = this.config.priority;
-        }
-
-        this.config.sort[item].count = {
-          0: 1,
-          1: 2,
-          2: 0,
-        }[this.config.sort[item].count];
-
-        if (this.config.sort[item].count === 0) {
-          this.config.priority--;
-          Object.entries(this.config.sort).map(([key, value]) => {
-            this.config.sort[key].priority =
-              this.config.sort[key].priority > this.config.sort[item].priority
-                ? value.priority !== 0
-                ? value.priority-1
-                : 0
-                : this.config.sort[key].priority
-            ;
-          });
-          this.config.sort[item].priority = 0;
-        }
+      tableListHeaderValueClick: function (name) {
+        this.setConfigSort(name);
       },
     },
   }
