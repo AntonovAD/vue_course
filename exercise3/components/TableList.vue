@@ -21,8 +21,8 @@
       </td>
     </tr>
     <tr
-      v-for="(item, index) in list"
-      :key="index"
+      v-for="(item, itemIndex) in list"
+      :key="itemIndex"
     >
       <td>
         {{item.name}}
@@ -31,10 +31,12 @@
         {{item.price}}
       </td>
       <td
+        v-for="(button, buttonIndex) in controlButtons"
+        :key="buttonIndex"
         class="table-list-item-button"
-        v-on:click="() => buyAction(item)"
+        v-on:click="() => button.action(item)"
       >
-        {{item.inCart ? "Добавлено" : "В корзину"}}
+        {{button.title(item)}}
       </td>
     </tr>
     </tbody>
@@ -65,9 +67,9 @@
         default: () => {},
         type: Function
       },
-      buyAction: {
-        default: () => {},
-        type: Function
+      controlButtons: {
+        default: () => ([]),
+        type: Array
       },
     }
   }

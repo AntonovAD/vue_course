@@ -11,7 +11,16 @@
         :header="header"
         :headerAction="(item) => tableListHeaderValueClick(item.name)"
         :config="config"
-        :buyAction="tableListItemBuyClick"
+        :controlButtons="[
+          {
+            title(item) {
+              return item.inCart ? 'Добавлено' : 'В корзину';
+            },
+            action(item) {
+              tableListItemBuyClick(item);
+            }
+          }
+        ]"
       />
     </fragment>
   </div>
