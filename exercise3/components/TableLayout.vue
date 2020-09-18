@@ -1,30 +1,35 @@
 <template>
   <div class="table-layout">
     <Loader v-if="isFetching"/>
-    <Table
-      v-else
-      :list="sorted"
-      :header="header"
-      :headerOnClick="tableListHeaderValueClick"
-      :filter="config.filter"
-      :filterChange="tableFilterValueChange"
-      :config="config"
-    />
+    <fragment v-else>
+      <TableFilter
+        :filter="config.filter"
+        :filterAction="tableFilterValueChange"
+      />
+      <TableList
+        :list="sorted"
+        :header="header"
+        :headerAction="(item) => tableListHeaderValueClick(item.name)"
+        :config="config"
+      />
+    </fragment>
   </div>
 </template>
 
 <script>
-  import Loader from "./Loader";
-  import Table from "./Table";
-  import Fragment from 'vue-fragment';
   import Vue from "vue";
+  import Loader from "./Loader";
+  import TableList from "./TableList";
+  import TableFilter from "./TableFilter";
+  import Fragment from 'vue-fragment';
   Vue.use(Fragment.Plugin);
 
   export default {
     name: 'TableLayout',
     components: {
+      TableFilter,
+      TableList,
       Loader,
-      Table,
     },
     data: function() {
       return {

@@ -1,33 +1,4 @@
 <template>
-  <fragment>
-  <table class="table-list">
-    <tbody>
-    <tr class="table-list-header">
-      <td
-        v-for="(item, index) in header"
-        :key="index"
-        v-on:click="headerOnClick(item.name)"
-        v-bind:class="{'sort-asc': config.sort[item.name].count === 1, 'sort-desc': config.sort[item.name].count === 2}"
-      >
-        <span>
-          {{ item.name }}
-          {{ config.sort[item.name].priority !== 0 ? config.sort[item.name].priority : null }}
-        </span>
-      </td>
-    </tr>
-    <tr
-      v-for="(item, index) in list"
-      :key="index"
-    >
-      <td>
-        {{ item.name }}
-      </td>
-      <td>
-        {{ item.price }}
-      </td>
-    </tr>
-    </tbody>
-  </table>
   <table class="table-filter">
     <tbody>
     <tr class="table-filter-header">
@@ -47,7 +18,7 @@
                 :placeholder="value.from.placeholder"
                 :type="value.from.type"
                 v-model.number="value.from.value"
-                v-on:change="filterChange"
+                v-on:change="filterAction"
               />
             </label>
           </td>
@@ -59,7 +30,7 @@
                 :placeholder="value.to.placeholder"
                 :type="value.to.type"
                 v-model.lazy.number="value.to.value"
-                v-on:change="filterChange"
+                v-on:change="filterAction"
               />
             </label>
           </td>
@@ -68,47 +39,29 @@
     </fragment>
     </tbody>
   </table>
-  </fragment>
 </template>
 
 <script>
-  import Fragment from 'vue-fragment';
   import Vue from "vue";
+  import Fragment from 'vue-fragment';
   Vue.use(Fragment.Plugin);
 
   export default {
-    name: "Table",
+    name: "TableFilter",
     props: {
-      list: Array,
-      header: Array,
-      headerOnClick: Function,
-      filter: Object,
-      filterChange: Function,
-      config: Object,
+      filter: {
+        default: () => ({}),
+        type: Object
+      },
+      filterAction: {
+        default: () => {},
+        type: Function
+      },
     }
   }
 </script>
 
 <style scoped>
-  .table-list {
-
-  }
-  .table-list-header {
-    cursor: pointer;
-    background: lavender;
-  }
-  .table-list-header td:hover {
-    background: moccasin;
-  }
-  .table-list-header td span::after {
-    content: '';
-  }
-  .table-list-header td.sort-asc span::after {
-    content: '▲';
-  }
-  .table-list-header td.sort-desc span::after {
-    content: '▼';
-  }
   .table-filter {
 
   }
@@ -126,6 +79,7 @@
     outline: none;
     padding: 0;
     height: 38px;
+    width: 100%;
     text-align: center;
   }
   .table-filter-value td input:hover {
@@ -133,6 +87,7 @@
   }
   tr, td {
     border-color: transparent;
+    background: white;
   }
   td {
     border: 1px solid white;
