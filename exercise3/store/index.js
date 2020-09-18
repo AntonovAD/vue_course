@@ -116,6 +116,11 @@ export default () => {
         state.list.config.priority = 0;
       },
       setListConfigSort(state, {name}) {
+        if (!state.list.config.sort[name]) {
+          console.warn(`undefined sort "${name}" in config`);
+          return;
+        }
+
         if (state.list.config.sort[name].count === 0) {
           state.list.config.priority++;
           state.list.config.sort[name].priority = state.list.config.priority;
@@ -157,60 +162,100 @@ export default () => {
           const header = [
             {
               name: "Название",
+              ref: "name",
+            },
+            {
+              name: "Категория",
+              ref: "category",
             },
             {
               name: "Цена",
+              ref: "price",
             },
           ];
           const data = [
             {
               id: 1,
               name: "материнка",
+              category: "комплектующие",
               price: 6210,
             },
             {
               id: 2,
               name: "проц",
+              category: "комплектующие",
               price: 8730,
+            },
+            {
+              id: 11,
+              name: "монитор",
+              category: "периферия",
+              price: 10300,
             },
             {
               id: 3,
               name: "видюха",
+              category: "комплектующие",
               price: 4540,
             },
             {
               id: 4,
               name: "видюха",
+              category: "комплектующие",
               price: 7100,
+            },
+            {
+              id: 12,
+              name: "клава",
+              category: "периферия",
+              price: 2350,
             },
             {
               id: 5,
               name: "бп",
+              category: "комплектующие",
               price: 2080,
+            },
+            {
+              id: 13,
+              name: "мышь",
+              category: "периферия",
+              price: 1750,
+            },
+            {
+              id: 14,
+              name: "коврик",
+              category: "периферия",
+              price: 2050,
             },
             {
               id: 6,
               name: "корпус",
+              category: "периферия",
               price: 5600,
             },
             {
               id: 7,
               name: "двд-ром",
+              category: "комплектующие",
               price: 1050,
             },
             {
               id: 8,
               name: "жесткий диск",
+              category: "комплектующие",
               price: 3400,
             },
             {
               id: 9,
               name: "звуковая",
+              category: "комплектующие",
               price: 3250,
             },
             {
               id: 10,
               name: "оператива",
+              category: "комплектующие",
               price: 6210,
             },
           ];
@@ -237,6 +282,15 @@ export default () => {
                   placeholder: "Цена до (lazy)",
                   type: "number",
                   value: undefined,
+                },
+                ["Категория"]: {
+                  type: "list",
+                  ref: "category",
+                  data: {
+                    placeholder: "Название",
+                    type: "string",
+                    value: undefined,
+                  },
                 },
               }
             },

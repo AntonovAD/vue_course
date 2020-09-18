@@ -6,15 +6,17 @@
         v-for="(item, index) in header"
         :key="index"
         v-on:click="() => headerAction(item)"
-        v-bind:class="{
+        v-bind:class="config.sort[item.name] ? {
           'sort-asc': config.sort[item.name].count === 1,
           'sort-desc': config.sort[item.name].count === 2
-        }"
+        } : {}"
       >
         <span>
           {{item.name}}
-          {{config.sort[item.name].priority !== 0
-            ? config.sort[item.name].priority
+          {{config.sort[item.name]
+            ? config.sort[item.name].priority !== 0
+              ? config.sort[item.name].priority
+              : null
             : null
           }}
         </span>
@@ -24,15 +26,16 @@
       v-for="(item, itemIndex) in list"
       :key="itemIndex"
     >
-      <td>
-        {{item.name}}
-      </td>
-      <td>
-        {{item.price}}
+      <td
+        v-for="(value, key, valueIndex) in item"
+        v-if="header.map(h=>h.ref).includes(key)"
+        :key="`value-${valueIndex}`"
+      >
+        {{value}}
       </td>
       <td
         v-for="(button, buttonIndex) in controlButtons"
-        :key="buttonIndex"
+        :key="`button-${buttonIndex}`"
         class="table-list-item-button"
         v-on:click="() => button.action(item)"
       >
