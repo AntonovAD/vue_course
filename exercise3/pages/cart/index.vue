@@ -34,7 +34,22 @@
             }
           }
         ]"
+        :style="{marginBottom: '20px'}"
       />
+      <div class="cart-total">
+        <h2>
+          Итого:
+          {{cart.list.reduce((result, item) => {
+          return result + (item.price * cart.config[item.id].count);
+          }, 0)}}
+          руб.
+        </h2>
+      </div>
+      <div class="cart-buy">
+        <div class="button">
+          Купить
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -65,6 +80,15 @@
   }
   .cart-layout {
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
+  }
+  .cart-total {
+    margin-bottom: 20px;
+  }
+  .cart-buy {
+    display: flex;
+    margin-bottom: 20px;
+    color: #3b8070;
+    cursor: pointer;
   }
 </style>

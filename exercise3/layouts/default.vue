@@ -88,4 +88,12 @@
   .page-title {
     margin-bottom: 20px;
   }
+
+  .button {
+    display: flex;
+    background: white;
+    border: 1px solid white;
+    padding: 10px 50px;
+    min-width: 58px;
+  }
 </style>

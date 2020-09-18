@@ -89,7 +89,7 @@
 
 <style scoped>
   .table-list {
-
+    display: flex;
   }
   .table-list-header td {
     cursor: pointer;
