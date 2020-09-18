@@ -46,7 +46,10 @@
         </h2>
       </div>
       <div class="cart-buy">
-        <div class="button">
+        <div
+          class="button"
+          v-on:click="buyItems"
+        >
           Купить
         </div>
       </div>
@@ -70,6 +73,9 @@
     methods: {
       delFromCart(item) {
         this.$store.dispatch("delFromCart", {item});
+      },
+      buyItems() {
+        this.$store.dispatch("buyItems", {});
       },
     },
   }

@@ -185,7 +185,56 @@ export default () => {
         state.cart.list = state.cart.list.filter(list => list.id !== item.id);
 
         state.cart.config[item.id] = {};
-      }
+      },
+      buyItems(state) {
+        let hasError = false;
+
+        //сначала валидируем
+        state.cart.list.forEach((list) => {
+          const itemIndex = state.list.data.findIndex(item => item.id === list.id);
+
+          if (itemIndex !== -1) {
+            const config = state.cart.config[list.id];
+
+            if (config) {
+
+              if (config.count) {
+                const diff = state.list.data[itemIndex].count - config.count;
+
+                if (diff>=0) {
+                  //null;
+                } else {
+                  hasError = true;
+                  console.error(`to much (${config.count}) item with id:${list.id} (${state.list.data[itemIndex].count}) in cart`);
+                }
+              } else {
+                hasError = true;
+                console.error(`invalid count (${config.count}) of item with id:${list.id} in cart`);
+              }
+            } else {
+              hasError = true;
+              console.error(`invalid config of item with id:${list.id} in cart`);
+            }
+          } else {
+            hasError = true;
+            console.error(`undefined item with id:${list.id} in cart`);
+          }
+        });
+
+        //потом покупаем
+        if (!hasError) {
+          state.cart.list.forEach((list) => {
+            const itemIndex = state.list.data.findIndex(item => item.id === list.id);
+            const config = state.cart.config[list.id];
+            state.list.data[itemIndex].count -= config.count;
+          });
+
+          state.cart.list = [];
+          state.cart.config = {};
+        } else {
+          console.error(`buy rejected`);
+        }
+      },
     },
     actions: {
       requestList(context, {}) {
@@ -384,6 +433,9 @@ export default () => {
       delFromCart(context, {item}) {
         context.commit("delFromCart", {item});
       },
+      buyItems(context, {}) {
+        context.commit("buyItems");
+      },
     },
     modules: {}
   });
@@ -400,15 +452,11 @@ export default () => {
 
   store.helpers.withCart = (state, data) => {
     if (state.cart.list.length) {
-      return data.map((item) => {
-        return {
-          ...item,
-          inCart: store.helpers.inCart(state, item)
-        };
+      data.forEach((item) => {
+        item.inCart = store.helpers.inCart(state, item);
       });
-    } else {
-      return data;
     }
+    return data;
   };
 
   return store;
