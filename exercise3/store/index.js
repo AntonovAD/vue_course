@@ -181,6 +181,11 @@ export default () => {
           }
         });
       },
+      delFromCart(state, {item}) {
+        state.cart.list = state.cart.list.filter(list => list.id !== item.id);
+
+        state.cart.config[item.id] = {};
+      }
     },
     actions: {
       requestList(context, {}) {
@@ -375,7 +380,10 @@ export default () => {
       },
       resetListConfigFilter(context, {}) {
         context.commit("resetListConfigFilter");
-      }
+      },
+      delFromCart(context, {item}) {
+        context.commit("delFromCart", {item});
+      },
     },
     modules: {}
   });

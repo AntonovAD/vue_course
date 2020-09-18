@@ -27,7 +27,7 @@
               return 'Удалить';
             },
             action(item) {
-
+              delFromCart(item);
             },
             color(item) {
               return 'red';
@@ -66,6 +66,11 @@
         cart: (state) => state.cart,
         config: ({list}) => list.config,
       }),
+    },
+    methods: {
+      delFromCart(item) {
+        this.$store.dispatch("delFromCart", {item});
+      },
     },
   }
 </script>
