@@ -21,7 +21,7 @@ export default () => {
       filtered: (state) => {
         return store.helpers.withCart(state, Object.entries(state.list.config.filter || {}).reduce((result, [, value]) => {
           return result.filter((item) => {
-            if (value.type === "default") {
+            if (["default", "list"].includes(value.type)) {
               const filterMatch =
                 (value.data.value !== undefined
                   && value.data.value !== null
@@ -283,16 +283,15 @@ export default () => {
                   type: "number",
                   value: undefined,
                 },
-                ["Категория"]: {
-                  type: "list",
-                  ref: "category",
-                  data: {
-                    placeholder: "Название",
-                    type: "string",
-                    value: undefined,
-                  },
+              },
+              ["Категория"]: {
+                type: "list",
+                ref: "category",
+                data: {
+                  placeholder: "Категория",
+                  value: undefined,
                 },
-              }
+              },
             },
             sort: {
               ["Название"]: {

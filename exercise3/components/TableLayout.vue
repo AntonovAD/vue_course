@@ -3,6 +3,7 @@
     <Loader v-if="isFetching"/>
     <fragment v-else>
       <TableFilter
+        :data="origin"
         :filter="config.filter"
         :filterAction="tableFilterValueChange"
       />
@@ -47,6 +48,7 @@
         default: () => ([]),
         type: Array
       },
+      origin: Array,
       data: {
         default: () => ([]),
         type: Array

@@ -6,6 +6,7 @@
     <TableLayout
       :isFetching="isFetching"
       :header="header"
+      :origin="data"
       :data="sorted"
       :config="config"
       :setConfigFilter="setConfigFilter"
