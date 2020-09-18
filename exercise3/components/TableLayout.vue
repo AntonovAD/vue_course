@@ -6,6 +6,7 @@
         :data="origin"
         :filter="config.filter"
         :filterAction="tableFilterValueChange"
+        :filterResetAction="tableFilterReset"
       />
       <TableList
         :list="data"
@@ -76,6 +77,10 @@
         default: () => {},
         type: Function
       },
+      resetListConfigFilter: {
+        default: () => {},
+        type: Function
+      },
     },
     methods: {
       tableFilterValueChange: function (name, data, value) {
@@ -89,6 +94,9 @@
       tableListItemBuyClick: function (item) {
         this.addToCart(item);
       },
+      tableFilterReset: function () {
+        this.resetListConfigFilter();
+      }
     },
   }
 </script>

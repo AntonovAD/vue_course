@@ -152,7 +152,19 @@ export default () => {
         } else {
           console.warn(`item with id:${item.id} already in cart`);
         }
-      }
+      },
+      resetListConfigFilter(state) {
+        Object.entries(state.list.config.filter).forEach(([key, value]) => {
+          if (["default", "list"].includes(value.type)) {
+            state.list.config.filter[key].data.value = undefined;
+          } else if (value.type === "range") {
+            state.list.config.filter[key].from.value = undefined;
+            state.list.config.filter[key].to.value = undefined;
+          } else {
+            console.error(`unknown filter type: ${value.type}`);
+          }
+        });
+      },
     },
     actions: {
       requestList(context, {}) {
@@ -323,6 +335,9 @@ export default () => {
       addToCart(context, {item}) {
         context.commit("addToCart", {item});
       },
+      resetListConfigFilter(context, {}) {
+        context.commit("resetListConfigFilter");
+      }
     },
     modules: {}
   });

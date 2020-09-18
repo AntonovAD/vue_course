@@ -13,6 +13,7 @@
       :resetConfigSort="resetConfigSort"
       :setConfigSort="setConfigSort"
       :addToCart="addToCart"
+      :resetListConfigFilter="resetListConfigFilter"
     />
   </div>
 </template>
@@ -44,7 +45,10 @@
       },
       addToCart(item) {
         this.$store.dispatch("addToCart", {item});
-      }
+      },
+      resetListConfigFilter() {
+        this.$store.dispatch("resetListConfigFilter", {});
+      },
     },
     computed: {
       ...mapState({

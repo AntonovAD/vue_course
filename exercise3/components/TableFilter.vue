@@ -73,6 +73,13 @@
         </tr>
       </fragment>
     </fragment>
+    <tr class="table-filter-value table-filter-reset">
+      <td
+        v-on:click="filterResetAction"
+      >
+        Сбросить
+      </td>
+    </tr>
     </tbody>
   </table>
 </template>
@@ -94,6 +101,10 @@
         type: Object
       },
       filterAction: {
+        default: () => {},
+        type: Function
+      },
+      filterResetAction: {
         default: () => {},
         type: Function
       },
@@ -120,7 +131,8 @@
     padding: 0;
   }
   .table-filter-value td input,
-  .table-filter-value td select {
+  .table-filter-value td select,
+  .table-filter-reset {
     border: none;
     outline: none;
     padding: 0;
@@ -133,6 +145,10 @@
   }
   .table-filter-value td input:hover {
     background: whitesmoke;
+  }
+  .table-filter-reset {
+    cursor: pointer;
+    color: red;
   }
   tr, td {
     border-color: transparent;
