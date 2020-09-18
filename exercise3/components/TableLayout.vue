@@ -49,8 +49,18 @@
     computed: {
       filtered: function () {
         return Object.entries(this.config.filter).reduce((result, [, value]) => {
-          return this.data.concat().filter((item) => {
-            if (value.type === "range") {
+          return result.filter((item) => {
+            if (value.type === "default") {
+              const filterMatch =
+                (value.data.value !== undefined
+                  && value.data.value !== null
+                  && value.data.value !== "")
+                  ? item[value.ref].indexOf(value.data.value)+1
+                  : true
+              ;
+
+              return filterMatch;
+            } else if (value.type === "range") {
               const filterFrom =
                 (value.from.value !== undefined
                   && value.from.value !== null
@@ -73,7 +83,7 @@
               return true;
             }
           });
-        }, []);
+        }, this.data.concat());
       },
       sorted: function () {
         return this.filtered.concat().sort((a,b) => {

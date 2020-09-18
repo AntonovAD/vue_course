@@ -10,7 +10,21 @@
       v-for="(value, key) in filter"
       :key="key"
     >
-      <fragment v-if="value.type === 'range'">
+      <fragment v-if="value.type === 'default'">
+        <tr class="table-filter-value">
+          <td>
+            <label>
+              <input
+                :placeholder="value.data.placeholder"
+                :type="value.data.type"
+                v-model="value.data.value"
+                v-on:change="filterAction"
+              />
+            </label>
+          </td>
+        </tr>
+      </fragment>
+      <fragment v-else-if="value.type === 'range'">
         <tr class="table-filter-value">
           <td>
             <label>

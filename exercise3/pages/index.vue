@@ -97,6 +97,15 @@
         ];
         this.config = {
           filter: {
+            ["Название"]: {
+              type: "default",
+              ref: "name",
+              data: {
+                placeholder: "Название",
+                type: "string",
+                value: undefined,
+              },
+            },
             ["Цена"]: {
               type: "range",
               ref: "price",
