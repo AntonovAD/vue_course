@@ -38,6 +38,7 @@
         :key="`button-${buttonIndex}`"
         class="table-list-item-button"
         v-on:click="() => button.action(item)"
+        :style="{color: button.color(item)}"
       >
         {{button.title(item)}}
       </td>

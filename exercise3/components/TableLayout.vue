@@ -19,6 +19,9 @@
             },
             action(item) {
               tableListItemBuyClick(item);
+            },
+            color(item) {
+              return item.inCart ? '#3b8070' : undefined;
             }
           }
         ]"
