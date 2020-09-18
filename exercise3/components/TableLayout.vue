@@ -31,14 +31,20 @@
       TableList,
       Loader,
     },
-    data: function() {
-      return {
-        timeout: 2000,
-        isFetching: true,
-        header: [],
-        data: [],
-        config: {},
-      }
+    props: {
+      isFetching: Boolean,
+      header: {
+        default: () => ([]),
+        type: Array
+      },
+      data: {
+        default: () => ([]),
+        type: Array
+      },
+      config: {
+        default: () => ({}),
+        type: Object
+      },
     },
     computed: {
       filtered: function () {
@@ -140,93 +146,6 @@
         }
       },
     },
-    mounted: function () {
-      this.isFetching = true;
-
-      setTimeout(() => {
-        this.header = [
-          {
-            name: "Название",
-          },
-          {
-            name: "Цена"
-          },
-        ];
-        this.data = [
-          {
-            name: "материнка",
-            price: 6210,
-          },
-          {
-            name: "проц",
-            price: 8730,
-          },
-          {
-            name: "видюха",
-            price: 4540,
-          },
-          {
-            name: "видюха",
-            price: 7100,
-          },
-          {
-            name: "бп",
-            price: 2080,
-          },
-          {
-            name: "корпус",
-            price: 5600,
-          },
-          {
-            name: "двд-ром",
-            price: 1050,
-          },
-          {
-            name: "жесткий диск",
-            price: 3400,
-          },
-          {
-            name: "звуковая",
-            price: 3250,
-          },
-          {
-            name: "оператива",
-            price: 6210,
-          },
-        ];
-        this.config = {
-          filter: {
-            ["Цена"]: {
-              type: "range",
-              ref: "price",
-              from: {
-                placeholder: "Цена от",
-                type: "number",
-                value: undefined,
-              },
-              to: {
-                placeholder: "Цена до (lazy)",
-                type: "number",
-                value: undefined,
-              },
-            }
-          },
-          sort: {
-            ["Название"]: {
-              priority: 0,
-              count: 0
-            },
-            ["Цена"]: {
-              priority: 0,
-              count: 0
-            },
-          },
-          priority: 0,
-        };
-
-        this.isFetching = false;
-      }, this.timeout);
-    }
   }
 </script>
 
