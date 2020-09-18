@@ -1,7 +1,7 @@
 <template>
 <fragment>
   <Header/>
-  <div>
+  <div class="content-wrapper">
     <Nuxt />
   </div>
 </fragment>
@@ -44,6 +44,11 @@
     margin: 0;
   }
 
+  .content-wrapper {
+    background: #f6f6f6;
+    color: #444;
+  }
+
   .button--green {
     display: inline-block;
     border-radius: 4px;
@@ -72,6 +77,7 @@
     color: #fff;
     background-color: #35495e;
   }
+
   .flex-wrap {
     display: flex;
     flex-direction: row;

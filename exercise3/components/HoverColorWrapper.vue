@@ -1,6 +1,7 @@
 <template>
   <div
-      class="icon-button"
+      class="hover-color-button"
+      :style="{cursor: interactive ? 'pointer' : 'default'}"
       v-on:mouseover="hover=true"
       v-on:mouseout="hover=false"
       v-on:click="($event) => {
@@ -8,16 +9,20 @@
         action();
       }"
   >
-    <slot :color="hover ? hoverColor : color"/>
+    <slot :color="hover ? hoverColor ? hoverColor : color : color"/>
   </div>
 </template>
 
 <script>
   export default {
-    name: "IconButton",
+    name: "HoverColorWrapper",
     props: {
       color: String,
       hoverColor: String,
+      interactive: {
+        default: true,
+        type: Boolean
+      },
       action: {
         default: ()=>{},
         type: Function
@@ -32,7 +37,7 @@
 </script>
 
 <style scoped>
-  .icon-button {
-    cursor: pointer;
+  .hover-color-button {
+    display: flex;
   }
 </style>

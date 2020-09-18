@@ -1,40 +1,34 @@
 <template>
   <nav>
     <div class="header-title">
-      Магазин
+      <b>Магазин</b>
     </div>
     <div class="header-cart">
-      <IconButton
-        :color="'#fff'"
-        :hoverColor="'#fff'"
+      <HoverColorWrapper
+        :color="'#444'"
         :class="'flex-wrap'"
         :style="{marginRight: '5px'}"
       >
         <template slot-scope="props">
           <div
             :style="{color: props.color, marginRight: '5px'}"
-          >Корзина</div>
-          <CartIcon
-            :color="props.color" :size="25"
-            :style="{marginRight: '5px'}"
-          />
+          ><b>Корзина</b></div>
           <CircleIcon
             :symbol="0"
-            :style="{background: props.color, color: '#3b8070'}"
+            :style="{background: props.color, color: 'moccasin'}"
           />
         </template>
-      </IconButton>
+      </HoverColorWrapper>
     </div>
   </nav>
 </template>
 
 <script>
-  import IconButton from "./IconButton";
-  import CartIcon from "./Icons/CartIcon";
+  import HoverColorWrapper from "./HoverColorWrapper";
   import CircleIcon from "./CircleIcon";
   export default {
     name: "Header",
-    components: {CircleIcon, CartIcon, IconButton}
+    components: {CircleIcon, HoverColorWrapper}
   }
 </script>
 
@@ -43,7 +37,7 @@
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    background: #3b8070;
+    background: moccasin;
     padding: 10px 20px;
   }
   .header-title {
@@ -52,7 +46,7 @@
     flex-direction: row;
     justify-content: flex-start;
     align-items: center;
-    color: #fff;
+    color: #444;
   }
   .header-cart {
     display: flex;
@@ -60,6 +54,6 @@
     flex-direction: row;
     justify-content: flex-end;
     align-items: center;
-    color: #fff;
+    color: #444;
   }
 </style>

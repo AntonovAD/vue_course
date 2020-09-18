@@ -229,6 +229,5 @@
   .table-layout {
     display: flex;
     flex-direction: row;
-    border: 1px solid #ccc;
   }
 </style>
