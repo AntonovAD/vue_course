@@ -58,6 +58,7 @@ export default () => {
       },
       sorted: (state, getters) => {
         return store.helpers.withCart(state, getters.filtered.concat().sort((a,b) => {
+          //TODO можно оптимизировать, но в рамках курса это не нужно
           const compareName = {
             0: 0,
             1: a.name.localeCompare(b.name),
@@ -70,9 +71,16 @@ export default () => {
             2: b.price-a.price,
           }[state.list.config.sort["Цена"].count];
 
+          const compareCount = {
+            0: 0,
+            1: a.count-b.count,
+            2: b.count-a.count,
+          }[state.list.config.sort["Остаток"].count];
+
           const compareDict = {
             ["Название"]: compareName,
-            ["Цена"]: comparePrice
+            ["Цена"]: comparePrice,
+            ["Остаток"]: compareCount,
           };
 
           const comparePriority = Object.entries(state.list.config.sort).map(([key, value]) => {
@@ -86,7 +94,7 @@ export default () => {
             return a.priority - b.priority;
           });
 
-          return compareDict[comparePriority[0].name] || compareDict[comparePriority[1].name];
+          return compareDict[comparePriority[0].name] || compareDict[comparePriority[1].name] || compareDict[comparePriority[2].name];
         }));
       },
       cartItems: (state) => {
@@ -181,6 +189,10 @@ export default () => {
               ref: "category",
             },
             {
+              name: "Остаток",
+              ref: "count",
+            },
+            {
               name: "Цена",
               ref: "price",
             },
@@ -190,84 +202,98 @@ export default () => {
               id: 1,
               name: "материнка",
               category: "комплектующие",
+              count: 10,
               price: 6210,
             },
             {
               id: 2,
               name: "проц",
               category: "комплектующие",
+              count: 3,
               price: 8730,
             },
             {
               id: 11,
               name: "монитор",
               category: "периферия",
+              count: 2,
               price: 10300,
             },
             {
               id: 3,
               name: "видюха",
               category: "комплектующие",
+              count: 10,
               price: 4540,
             },
             {
               id: 4,
               name: "видюха",
               category: "комплектующие",
+              count: 8,
               price: 7100,
             },
             {
               id: 12,
               name: "клава",
               category: "периферия",
+              count: 10,
               price: 2350,
             },
             {
               id: 5,
               name: "бп",
               category: "комплектующие",
+              count: 10,
               price: 2080,
             },
             {
               id: 13,
               name: "мышь",
               category: "периферия",
+              count: 7,
               price: 1750,
             },
             {
               id: 14,
               name: "коврик",
               category: "периферия",
+              count: 10,
               price: 2050,
             },
             {
               id: 6,
               name: "корпус",
               category: "периферия",
+              count: 10,
               price: 5600,
             },
             {
               id: 7,
               name: "двд-ром",
               category: "комплектующие",
+              count: 5,
               price: 1050,
             },
             {
               id: 8,
               name: "жесткий диск",
               category: "комплектующие",
+              count: 10,
               price: 3400,
             },
             {
               id: 9,
               name: "звуковая",
               category: "комплектующие",
+              count: 10,
               price: 3250,
             },
             {
               id: 10,
               name: "оператива",
               category: "комплектующие",
+              count: 10,
               price: 6210,
             },
           ];
@@ -311,6 +337,10 @@ export default () => {
                 count: 0
               },
               ["Цена"]: {
+                priority: 0,
+                count: 0
+              },
+              ["Остаток"]: {
                 priority: 0,
                 count: 0
               },
