@@ -84,4 +84,8 @@
     justify-content: center;
     align-items: center;
   }
+
+  .page-title {
+    margin-bottom: 20px;
+  }
 </style>

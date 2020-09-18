@@ -1,5 +1,8 @@
 <template>
-  <div class="container">
+  <div id="index" class="container">
+    <div class="page-title">
+      <h1>Список Товаров:</h1>
+    </div>
     <TableLayout
       :isFetching="isFetching"
       :header="header"
@@ -62,9 +65,10 @@
 
 <style scoped>
   .container {
+    display: flex;
+    flex-direction: column;
     margin: 0 auto;
     padding: 20px;
     min-height: calc(100vh - 50px);
-    display: flex;
   }
 </style>

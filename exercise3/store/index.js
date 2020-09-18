@@ -89,6 +89,9 @@ export default () => {
           return compareDict[comparePriority[0].name] || compareDict[comparePriority[1].name];
         });
       },
+      cartItems: (state) => {
+        return state.cart.list.length;
+      }
     },
     mutations: {
       listIsFetching(state, value) {

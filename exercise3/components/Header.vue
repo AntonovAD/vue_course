@@ -1,6 +1,9 @@
 <template>
   <nav>
-    <div class="header-title">
+    <div
+      class="header-title"
+      v-on:click="logoClick"
+    >
       <b>Магазин</b>
     </div>
     <div class="header-cart">
@@ -8,13 +11,14 @@
         :color="'#444'"
         :class="'flex-wrap'"
         :style="{marginRight: '5px'}"
+        :action="cartClick"
       >
         <template slot-scope="props">
           <div
             :style="{color: props.color, marginRight: '5px'}"
           ><b>Корзина</b></div>
           <CircleIcon
-            :symbol="0"
+            :symbol="cartItems"
             :style="{background: props.color, color: 'moccasin'}"
           />
         </template>
@@ -24,11 +28,26 @@
 </template>
 
 <script>
+  import {mapGetters} from "vuex";
   import HoverColorWrapper from "./HoverColorWrapper";
   import CircleIcon from "./CircleIcon";
+
   export default {
     name: "Header",
-    components: {CircleIcon, HoverColorWrapper}
+    components: {CircleIcon, HoverColorWrapper},
+    computed: {
+      ...mapGetters([
+        "cartItems",
+      ]),
+    },
+    methods: {
+      logoClick() {
+        this.$router.push({path: "/"});
+      },
+      cartClick() {
+        this.$router.push({path: "/cart"});
+      }
+    },
   }
 </script>
 
@@ -47,6 +66,7 @@
     justify-content: flex-start;
     align-items: center;
     color: #444;
+    cursor: pointer;
   }
   .header-cart {
     display: flex;
