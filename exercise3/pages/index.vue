@@ -3,7 +3,7 @@
     <TableLayout
       :isFetching="isFetching"
       :header="header"
-      :data="data"
+      :data="sorted"
       :config="config"
       :setConfigFilter="setConfigFilter"
       :resetConfigSort="resetConfigSort"
@@ -13,7 +13,7 @@
 </template>
 
 <script>
-  import {mapState} from "vuex";
+  import {mapState, mapGetters} from "vuex";
   import TableLayout from "../components/TableLayout";
 
   export default {
@@ -45,6 +45,10 @@
         data: ({list}) => list.data,
         config: ({list}) => list.config,
       }),
+      ...mapGetters([
+        "filtered",
+        "sorted",
+      ]),
     },
     mounted: function () {
       this.requestList();
