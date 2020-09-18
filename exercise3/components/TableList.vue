@@ -4,7 +4,7 @@
     <tr class="table-list-header">
       <td
         v-for="(item, index) in header"
-        :key="index"
+        :key="`item-${index}`"
         v-on:click="() => headerAction(item)"
         v-bind:class="config.sort[item.name] ? {
           'sort-asc': config.sort[item.name].count === 1,
@@ -19,6 +19,14 @@
               : null
             : null
           }}
+        </span>
+      </td>
+      <td
+        v-for="(item, index) in controlButtons"
+        :key="`button-${index}`"
+      >
+        <span>
+          {{item.header}}
         </span>
       </td>
     </tr>

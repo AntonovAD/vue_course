@@ -15,6 +15,7 @@ export default () => {
       },
       cart: {
         list: [],
+        config: {},
       },
     },
     getters: {
@@ -158,6 +159,9 @@ export default () => {
         if (!store.helpers.inCart(state, item)) {
           if (item.count !== 0) {
             state.cart.list.push(item);
+
+            state.cart.config[item.id] = {};
+            state.cart.config[item.id].count = 1;
           } else {
             console.warn(`item with id:${item.id} out of stock`);
           }

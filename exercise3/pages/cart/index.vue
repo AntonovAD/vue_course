@@ -5,9 +5,35 @@
     </div>
     <div class="cart-layout">
       <TableList
-        :list="cart"
+        :list="cart.list"
         :header="header"
         :config="config"
+        :controlButtons="[
+          {
+            title(item) {
+              const config = cart.config[item.id];
+              return config ? config.count : undefined;
+            },
+            action(item) {
+
+            },
+            color(item) {
+
+            },
+            header: 'Заказано'
+          },
+          {
+            title(item) {
+              return 'Удалить';
+            },
+            action(item) {
+
+            },
+            color(item) {
+              return 'red';
+            }
+          }
+        ]"
       />
     </div>
   </div>
@@ -22,7 +48,7 @@
     computed: {
       ...mapState({
         header: ({list}) => list.header,
-        cart: ({cart}) => cart.list,
+        cart: (state) => state.cart,
         config: ({list}) => list.config,
       }),
     },
