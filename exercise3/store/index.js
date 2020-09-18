@@ -155,8 +155,12 @@ export default () => {
         }
       },
       addToCart(state, {item}) {
-        if (!store.helpers.inCart(state, item) ) {
-          state.cart.list.push(item);
+        if (!store.helpers.inCart(state, item)) {
+          if (item.count !== 0) {
+            state.cart.list.push(item);
+          } else {
+            console.warn(`item with id:${item.id} out of stock`);
+          }
         } else {
           console.warn(`item with id:${item.id} already in cart`);
         }
@@ -272,14 +276,14 @@ export default () => {
               id: 7,
               name: "двд-ром",
               category: "комплектующие",
-              count: 5,
+              count: 0,
               price: 1050,
             },
             {
               id: 8,
               name: "жесткий диск",
               category: "комплектующие",
-              count: 10,
+              count: 5,
               price: 3400,
             },
             {
