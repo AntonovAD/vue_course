@@ -58,7 +58,9 @@
       ]),
     },
     mounted: function () {
-      this.requestList();
+      if (!this.data.length) {
+        this.requestList();
+      }
     },
   }
 </script>
