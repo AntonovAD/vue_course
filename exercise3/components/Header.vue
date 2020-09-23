@@ -36,9 +36,9 @@
     name: "Header",
     components: {CircleIcon, HoverColorWrapper},
     computed: {
-      ...mapGetters([
-        "cartItems",
-      ]),
+      ...mapGetters({
+        cartItems: "cart/cartItems",
+      }),
     },
     methods: {
       logoClick() {

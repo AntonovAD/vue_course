@@ -39,9 +39,7 @@
       <div class="cart-total">
         <h2>
           Итого:
-          {{cart.list.reduce((result, item) => {
-          return result + (item.price * cart.config[item.id].count);
-          }, 0)}}
+          {{totalPrice}}
           руб.
         </h2>
       </div>
@@ -58,7 +56,7 @@
 </template>
 
 <script>
-  import {mapState} from "vuex";
+  import {mapState, mapGetters} from "vuex";
   import TableList from "../../components/TableList";
 
   export default {
@@ -66,16 +64,19 @@
     computed: {
       ...mapState({
         header: ({list}) => list.header,
-        cart: (state) => state.cart,
+        cart: ({cart}) => cart,
         config: ({list}) => list.config,
+      }),
+      ...mapGetters({
+        totalPrice: "cart/cartTotalPrice",
       }),
     },
     methods: {
       delFromCart(item) {
-        this.$store.dispatch("delFromCart", {item});
+        this.$store.dispatch("cart/delFromCart", {item});
       },
       buyItems() {
-        this.$store.dispatch("buyItems", {});
+        this.$store.dispatch("cart/buyItems", {});
       },
     },
   }

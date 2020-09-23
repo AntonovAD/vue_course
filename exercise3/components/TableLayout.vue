@@ -9,7 +9,7 @@
         :filterResetAction="tableFilterReset"
       />
       <TableList
-        :list="data"
+        :list="dataWithCart"
         :header="header"
         :headerAction="(item) => tableListHeaderValueClick(item.name)"
         :config="config"
@@ -61,6 +61,10 @@
         default: () => ({}),
         type: Object
       },
+      cart: {
+        default: () => ([]),
+        type: Array
+      },
       setConfigFilter: {
         default: () => {},
         type: Function
@@ -81,6 +85,14 @@
         default: () => {},
         type: Function
       },
+    },
+    computed: {
+      dataWithCart() {
+        return this.data.map((item) => ({
+          ...item,
+          inCart: this.cart.map(cart => cart.id).includes(item.id),
+        }));
+      }
     },
     methods: {
       tableFilterValueChange: function (name, data, value) {

@@ -9,6 +9,7 @@
       :origin="data"
       :data="sorted"
       :config="config"
+      :cart="cart"
       :setConfigFilter="setConfigFilter"
       :resetConfigSort="resetConfigSort"
       :setConfigSort="setConfigSort"
@@ -32,22 +33,22 @@
     },
     methods: {
       requestList() {
-        this.$store.dispatch("requestList", {});
+        this.$store.dispatch("list/requestData", {});
       },
       setConfigFilter(name, data, value) {
-        this.$store.dispatch("setListConfigFilter", {name, data, value});
+        this.$store.dispatch("list/setConfigFilter", {name, data, value});
       },
       resetConfigSort() {
-        this.$store.dispatch("resetListConfigSort", {});
+        this.$store.dispatch("list/resetConfigSort", {});
       },
       setConfigSort(name) {
-        this.$store.dispatch("setListConfigSort", {name});
+        this.$store.dispatch("list/setConfigSort", {name});
       },
       addToCart(item) {
-        this.$store.dispatch("addToCart", {item});
+        this.$store.dispatch("cart/addToCart", {item});
       },
       resetListConfigFilter() {
-        this.$store.dispatch("resetListConfigFilter", {});
+        this.$store.dispatch("list/resetConfigFilter", {});
       },
     },
     computed: {
@@ -56,11 +57,12 @@
         header: ({list}) => list.header,
         data: ({list}) => list.data,
         config: ({list}) => list.config,
+        cart: ({cart}) => cart.list,
       }),
-      ...mapGetters([
-        "filtered",
-        "sorted",
-      ]),
+      ...mapGetters({
+        filtered: "list/filtered",
+        sorted: "list/sorted",
+      }),
     },
     mounted: function () {
       if (!this.data.length) {
